@@ -52,14 +52,14 @@ async function run() {
       res.send({ token });
     });
 
-    app.post("/services", async (req, res) => {
+    app.post("/services", verifyToken, async (req, res) => {
       const data = req.body;
       const result = await servicesCollection.insertOne(data);
       res.send(result);
     });
 
     // service related api start
-    app.get("/services", async (req, res) => {
+    app.get("/services", verifyToken, async (req, res) => {
       const result = await servicesCollection.find().toArray();
       res.send(result);
     });
@@ -71,7 +71,7 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/services/:id", async (req, res) => {
+    app.delete("/services/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await servicesCollection.deleteOne(query);
@@ -79,7 +79,7 @@ async function run() {
       res.send(result);
     });
 
-    app.put("/services/:id", async (req, res) => {
+    app.put("/services/:id", verifyToken, async (req, res) => {
       const { id } = req.params;
       const { title, name, price, description, image } = req.body;
       const filter = { _id: new ObjectId(id) };
@@ -120,7 +120,6 @@ async function run() {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
       const result = await usersCollection.findOne(query);
-      console.log(result);
       res.send(result);
     });
 
