@@ -189,9 +189,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Stried Practice Side!");
+  res.send("Stried Revive For Assignment!");
 });
 
 app.listen(port, () => {
-  console.log(`Stride Practice ${port}`);
+  console.log(`Running On The Port ${port}`);
 });
