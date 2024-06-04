@@ -26,6 +26,7 @@ async function run() {
       .db("STRIED-REVIVE")
       .collection("services");
     const usersCollection = client.db("STRIED-REVIVE").collection("users");
+    const reviewsCollection = client.db("STRIED-REVIVE").collection("reviews");
     await client.connect();
 
     // Custome Middleware
@@ -59,7 +60,7 @@ async function run() {
     });
 
     // service related api start
-    app.get("/services", verifyToken, async (req, res) => {
+    app.get("/services", async (req, res) => {
       const result = await servicesCollection.find().toArray();
       res.send(result);
     });
@@ -115,6 +116,12 @@ async function run() {
       const result = await usersCollection.findOne(query);
       res.send(result);
     });
+    app.get("/users", verifyToken, async (req, res) => {
+      const email = req.query.email;
+      const query = { email };
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
 
     app.get("/users/:id", async (req, res) => {
       const { id } = req.params;
@@ -161,6 +168,21 @@ async function run() {
       console.log(result);
       res.send(result);
     });
+
+    // review api start
+    app.post("/reviews", verifyToken, async (req, res) => {
+      const review = req.body;
+      const result = await reviewsCollection.insertOne(review);
+      res.send(result);
+    });
+
+    app.get("/reviews", async (req, res) => {
+      const review = {};
+      const result = await reviewsCollection.find(review).toArray();
+      res.send(result);
+    });
+
+    // review code end
   } finally {
   }
 }
